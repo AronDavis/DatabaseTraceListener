@@ -1,18 +1,23 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>DTL: DatabaseTraceListener</id>
+    <id>DatabaseTraceListener</id>
     <version>1.0.0</version>
     <title>DTL: DatabaseTraceListener</title>
     <authors>Aron Davis</authors>
     <owners>Aron Davis</owners>
     <licenseUrl>https://github.com/AronDavis/DatabaseTraceListener</licenseUrl>
     <projectUrl>https://github.com/AronDavis/DatabaseTraceListener</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <iconUrl>https://github.com/AronDavis/DatabaseTraceListener/blob/master/Nuget%20Icon.png?raw=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
-    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <description>
+		A custom trace listener for logging to a database.
+	</description>
+    <releaseNotes>Initial release!</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Database SQL TraceListener DatabaseTraceListener DTL</tags>
   </metadata>
+  <files>
+  <file src="bin\Release\DTL.dll" target="lib\DTL.dll"/>
+  </files>
 </package>
