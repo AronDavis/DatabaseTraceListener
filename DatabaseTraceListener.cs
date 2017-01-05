@@ -16,6 +16,7 @@ namespace DTL
         private string _connectionString;
         private int _flushAfter;
         private ConcurrentQueue<LogEntry> _logEntryQueue;
+        public TraceSource TraceSource { get; set; }
 
         public DatabaseTraceListener(string connectionString, int flushAfter)
         {
@@ -32,6 +33,7 @@ namespace DTL
             _connectionString = connectionString;
             _flushAfter = flushAfter;
             _logEntryQueue = new ConcurrentQueue<LogEntry>();
+            TraceSource = new TraceSource("DatabaseTraceListener", SourceLevels.Error);
         }
 
         private void writeToDatabase()
@@ -75,7 +77,7 @@ namespace DTL
                             }
                             catch (Exception ex)
                             {
-
+                                TraceSource.TraceEvent(TraceEventType.Error, 0, ex.ToString());
                             }
                         }
                     }
@@ -83,7 +85,7 @@ namespace DTL
             }
             catch (Exception ex)
             {
-
+                TraceSource.TraceEvent(TraceEventType.Error, 0, ex.ToString());
             }
         }
 
