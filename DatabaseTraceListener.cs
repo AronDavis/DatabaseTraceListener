@@ -39,7 +39,7 @@ namespace DTL
             if (_logEntryQueue.Count == 0)
                 return;
 
-            string query = @"INSERT INTO AppLog(dateTimeCreated, category, contents, stackTrace, threadId, processName, processId)
+            string query = @"INSERT INTO LogEntry(dateTimeCreated, category, contents, stackTrace, threadId, processName, processId)
                              VALUES (@dateTimeCreated, @category, @contents, @stackTrace, @threadId, @processName, @processId)";
 
             try
