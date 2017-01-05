@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DatabaseTraceListener</id>
-    <version>1.0.0</version>
+    <version>1.0.002</version>
     <title>DTL: DatabaseTraceListener</title>
     <authors>Aron Davis</authors>
     <owners>Aron Davis</owners>
@@ -13,7 +13,7 @@
     <description>
 		A custom trace listener for logging to a database.
 	</description>
-    <releaseNotes>Initial release!</releaseNotes>
+    <releaseNotes>Renamed table to LogEntry.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Database SQL TraceListener DatabaseTraceListener DTL</tags>
   </metadata>
