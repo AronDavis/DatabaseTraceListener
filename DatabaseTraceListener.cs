@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Xml.Serialization;
 
 namespace DTL
 {
@@ -41,8 +42,8 @@ namespace DTL
             if (_logEntryQueue.Count == 0)
                 return;
 
-            string query = @"INSERT INTO LogEntry(dateTimeCreated, category, contents, stackTrace, threadId, processName, processId)
-                             VALUES (@dateTimeCreated, @category, @contents, @stackTrace, @threadId, @processName, @processId)";
+            string query = @"INSERT INTO LogEntry(dateTimeCreated, category, contents, stackTrace, threadId, processName, processId, eventId, source)
+                             VALUES (@dateTimeCreated, @category, @contents, @stackTrace, @threadId, @processName, @processId, @eventId, @source)";
 
             try
             {
@@ -58,6 +59,9 @@ namespace DTL
                         command.Parameters.Add("@threadId", SqlDbType.VarChar);
                         command.Parameters.Add("@processName", SqlDbType.VarChar);
                         command.Parameters.Add("@processId", SqlDbType.Int);
+                        command.Parameters.Add("@eventId", SqlDbType.Int);
+                        command.Parameters.Add("@source", SqlDbType.VarChar);
+
 
                         LogEntry logEntry;
                         while (_logEntryQueue.Count > 0)
@@ -70,6 +74,8 @@ namespace DTL
                             command.Parameters["@threadId"].Value = logEntry.ThreadId;
                             command.Parameters["@processName"].Value = logEntry.ProcessName;
                             command.Parameters["@processId"].Value = logEntry.ProcessId;
+                            command.Parameters["@eventId"].Value = logEntry.EventId;
+                            command.Parameters["@source"].Value = logEntry.Source;
 
                             try
                             {
@@ -101,13 +107,15 @@ namespace DTL
         {
             StackTrace trace = new StackTrace(3, true);
             addToQueue(new LogEntry(
-                dateTimeCreated: eventCache.DateTime.ToString("o"),
+                dateTimeCreated: eventCache.DateTime,
                 category: eventType.ToString(),
                 contents: data.ToString(),
                 stackTrace: trace.ToString(),
                 threadId: eventCache.ThreadId,
                 processName: Process.GetProcessById(eventCache.ProcessId).ProcessName,
-                processId: eventCache.ProcessId
+                processId: eventCache.ProcessId,
+                eventId: id,
+                source: source
                 ));
         }
 
@@ -115,13 +123,15 @@ namespace DTL
         {
             StackTrace trace = new StackTrace(3, true);
             addToQueue(new LogEntry(
-                dateTimeCreated: eventCache.DateTime.ToString("o"),
+                dateTimeCreated: eventCache.DateTime,
                 category: eventType.ToString(),
                 contents: message,
                 stackTrace: trace.ToString(),
                 threadId: eventCache.ThreadId,
                 processName: Process.GetProcessById(eventCache.ProcessId).ProcessName,
-                processId: eventCache.ProcessId
+                processId: eventCache.ProcessId,
+                eventId: id,
+                source: source
                 ));
         }
 
@@ -130,13 +140,15 @@ namespace DTL
             StackTrace trace = new StackTrace(1, true);
             Process process = Process.GetCurrentProcess();
             addToQueue(new LogEntry(
-                dateTimeCreated: DateTime.Now.ToString("o"),
+                dateTimeCreated: DateTime.Now,
                 category: "",
                 contents: message,
                 stackTrace: trace.ToString(),
                 threadId: Thread.CurrentThread.ManagedThreadId.ToString(),
                 processName: process.ProcessName,
-                processId: process.Id
+                processId: process.Id,
+                eventId: null,
+                source: null
                 ));
         }
 
@@ -150,13 +162,15 @@ namespace DTL
             StackTrace trace = new StackTrace(1, true);
             Process process = Process.GetCurrentProcess();
             addToQueue(new LogEntry(
-                dateTimeCreated: DateTime.Now.ToString("o"),
+                dateTimeCreated: DateTime.Now,
                 category: category,
                 contents: message,
                 stackTrace: trace.ToString(),
                 threadId: Thread.CurrentThread.ManagedThreadId.ToString(),
                 processName: process.ProcessName,
-                processId: process.Id
+                processId: process.Id,
+                eventId: null,
+                source: null
                 ));
         }
 
