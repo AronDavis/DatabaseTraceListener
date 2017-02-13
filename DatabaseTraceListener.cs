@@ -68,14 +68,14 @@ namespace DTL
                         {
                             _logEntryQueue.TryDequeue(out logEntry);
                             command.Parameters["@dateTimeCreated"].Value = logEntry.DateTimeCreated;
-                            command.Parameters["@category"].Value = logEntry.Category;
-                            command.Parameters["@contents"].Value = logEntry.Contents;
-                            command.Parameters["@stackTrace"].Value = logEntry.StackTrace;
+                            command.Parameters["@category"].Value = (object)logEntry.Category ?? DBNull.Value;
+                            command.Parameters["@contents"].Value = (object)logEntry.Contents ?? DBNull.Value;
+                            command.Parameters["@stackTrace"].Value = (object)logEntry.StackTrace ?? DBNull.Value;
                             command.Parameters["@threadId"].Value = logEntry.ThreadId;
                             command.Parameters["@processName"].Value = logEntry.ProcessName;
                             command.Parameters["@processId"].Value = logEntry.ProcessId;
-                            command.Parameters["@eventId"].Value = logEntry.EventId;
-                            command.Parameters["@source"].Value = logEntry.Source;
+                            command.Parameters["@eventId"].Value = (object)logEntry.EventId ?? DBNull.Value;
+                            command.Parameters["@source"].Value = (object)logEntry.Source ?? DBNull.Value;
 
                             try
                             {
