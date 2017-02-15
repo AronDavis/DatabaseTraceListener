@@ -42,8 +42,8 @@ namespace DTL
             if (_logEntryQueue.Count == 0)
                 return;
 
-            string query = @"INSERT INTO LogEntry(dateTimeCreated, category, contents, stackTrace, threadId, processName, processId, eventId, source)
-                             VALUES (@dateTimeCreated, @category, @contents, @stackTrace, @threadId, @processName, @processId, @eventId, @source)";
+            string query = @"INSERT INTO LogEntry(dateTimeCreated, category, contents, stackTrace, threadId, processName, processId, eventId, source, machineName)
+                             VALUES (@dateTimeCreated, @category, @contents, @stackTrace, @threadId, @processName, @processId, @eventId, @source, @machineName)";
 
             try
             {
@@ -61,6 +61,7 @@ namespace DTL
                         command.Parameters.Add("@processId", SqlDbType.Int);
                         command.Parameters.Add("@eventId", SqlDbType.Int);
                         command.Parameters.Add("@source", SqlDbType.VarChar);
+                        command.Parameters.Add("@machineName", SqlDbType.VarChar);
 
 
                         LogEntry logEntry;
@@ -68,14 +69,15 @@ namespace DTL
                         {
                             _logEntryQueue.TryDequeue(out logEntry);
                             command.Parameters["@dateTimeCreated"].Value = logEntry.DateTimeCreated;
-                            command.Parameters["@category"].Value = (object)logEntry.Category ?? DBNull.Value;
-                            command.Parameters["@contents"].Value = (object)logEntry.Contents ?? DBNull.Value;
-                            command.Parameters["@stackTrace"].Value = (object)logEntry.StackTrace ?? DBNull.Value;
+                            command.Parameters["@category"].Value = logEntry.Category;
+                            command.Parameters["@contents"].Value = logEntry.Contents;
+                            command.Parameters["@stackTrace"].Value = logEntry.StackTrace;
                             command.Parameters["@threadId"].Value = logEntry.ThreadId;
                             command.Parameters["@processName"].Value = logEntry.ProcessName;
                             command.Parameters["@processId"].Value = logEntry.ProcessId;
-                            command.Parameters["@eventId"].Value = (object)logEntry.EventId ?? DBNull.Value;
-                            command.Parameters["@source"].Value = (object)logEntry.Source ?? DBNull.Value;
+                            command.Parameters["@eventId"].Value = logEntry.EventId;
+                            command.Parameters["@source"].Value = logEntry.Source;
+                            command.Parameters["@machineName"].Value = logEntry.MachineName;
 
                             try
                             {
@@ -115,7 +117,8 @@ namespace DTL
                 processName: Process.GetProcessById(eventCache.ProcessId).ProcessName,
                 processId: eventCache.ProcessId,
                 eventId: id,
-                source: source
+                source: source,
+                machineName: Environment.MachineName
                 ));
         }
 
@@ -131,7 +134,8 @@ namespace DTL
                 processName: Process.GetProcessById(eventCache.ProcessId).ProcessName,
                 processId: eventCache.ProcessId,
                 eventId: id,
-                source: source
+                source: source,
+                machineName: Environment.MachineName
                 ));
         }
 
@@ -148,7 +152,8 @@ namespace DTL
                 processName: process.ProcessName,
                 processId: process.Id,
                 eventId: null,
-                source: null
+                source: null,
+                machineName: Environment.MachineName
                 ));
         }
 
@@ -170,7 +175,8 @@ namespace DTL
                 processName: process.ProcessName,
                 processId: process.Id,
                 eventId: null,
-                source: null
+                source: null,
+                machineName: Environment.MachineName
                 ));
         }
 

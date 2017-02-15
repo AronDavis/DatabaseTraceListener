@@ -9,7 +9,7 @@ namespace DTL
 {
     public class LogEntry
     {
-        public int Id { get; private set; } //TODO: make this an readonly interface?
+        public int Id { get; private set; }
         public DateTime DateTimeCreated;
         public string Category;
         public string Contents;
@@ -19,8 +19,9 @@ namespace DTL
         public int ProcessId;
         public int? EventId;
         public string Source;
+        public string MachineName;
 
-        public LogEntry(DateTime dateTimeCreated, string category, string contents, string stackTrace, string threadId, string processName, int processId, int? eventId, string source)
+        public LogEntry(DateTime dateTimeCreated, string category, string contents, string stackTrace, string threadId, string processName, int processId, int? eventId, string source, string machineName)
         {
             DateTimeCreated = dateTimeCreated;
             Category = category;
@@ -31,6 +32,7 @@ namespace DTL
             ProcessId = processId;
             EventId = eventId;
             Source = source;
+            MachineName = machineName;
         }
 
         public LogEntry(IDataReader dr)
@@ -56,6 +58,8 @@ namespace DTL
 
             if (dr["Source"] != DBNull.Value)
                 Source = (string)dr["Source"];
+
+            MachineName = (string)dr["MachineName"];
         }
     }
 }
